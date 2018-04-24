@@ -1,33 +1,53 @@
 import sqlite3
 
 #function to create table
-def testTable():
+def testTable(table):
     conn = sqlite3.connect("GnGMedicalGroup.DB")  #connect to the DB file
     c = conn.cursor()   #use for mult row fetch
     #sqllite3 statement to create table
-    sqlStatement=('''SELECT * FROM Doctor''')
+    sqlStatement=("SELECT * FROM " + table + ";")
     conn.execute(sqlStatement)  #execute the sql statement above
     print("Hello\n")
     #check to determine if records exist in table
     #pulling from contact list
-    c.execute("Select * from Doctor")
+    c.execute("SELECT * FROM " + table + ";")
     data = c.fetchone()
     print(data)
     c.close()
 
 #function to insert contact record data into the DB file
-def insertDoctor(fname,lname):
-    conn = sqlite3.connect("GnGMedicalGroup.db")  #connect to the DB file
-    c = conn.cursor()
-    #sqllite3 statement to insert contact record data into the DB file table
-    sqlStatement=("INSERT INTO Doctor"
-         "(fname,lname)"
-         "values(?,?)")
-    data = (fname,lname)
-    c.execute(sqlStatement,data)  #execute the sql statement above
-    conn.commit()
-    conn.close()
-    
+def insertRecord(table,fname,lname):
+    try:
+        conn = sqlite3.connect("GnGMedicalGroup.db")  #connect to the DB file
+        c = conn.cursor()
+        #sqllite3 statement to insert contact record data into the DB file table
+        sqlStatement=("INSERT INTO " + table + "(fname,lname)"
+             "values(?,?)")
+        data = (fname,lname)
+        c.execute(sqlStatement,data)  #execute the sql statement above
+        conn.commit()
+        conn.close()
+    except sqlite3.OperationalError:
+        print("\nError: Something is wrong with the DB file.")    
+
+def deleteRecord(table,table_id,pid):
+    try:
+        conn = sqlite3.connect("GnGMedicalGroup.db")
+        c = conn.cursor()
+        sqlStatement = ("DELETE FROM " + table + " WHERE " + table_id + " = ?;")
+        data = str(pid)
+        c.execute(sqlStatement,(data,))  #execute the sql statement above
+        conn.commit()
+        c.close()
+        conn.close()
+    except sqlite3.OperationalError:
+        print("\nError: Something is wrong with the DB file.")
+   
+#insertRecord("Doctor","Bill","Withers")
+testTable("Doctor")
+deleteRecord("Doctor","doctor_id",17)
+testTable("Doctor")
+
 def updateContacts(name,phone,pid):
     try:
         conn = sqlite3.connect("contacts.db")  #connect to the DB file
@@ -41,21 +61,7 @@ def updateContacts(name,phone,pid):
     except sqlite3.OperationalError:
         print("\nError: Something is wrong with the DB file.")
 
-def deleteDoctor(pid):
-    try:
-        conn = sqlite3.connect("contacts.db")  #connect to the DB file
-        c = conn.cursor()
-        #sqllite3 statement to delete contact record from the DB file table
-        sqlStatement = ("DELETE FROM Doctor WHERE pid = ?;")
-        data = str(pid)
-        c.execute(sqlStatement,(data,))  #execute the sql statement above
-        conn.commit()
-        c.close()
-        conn.close()
-    except:
-        print("\nError>> An Exception has occurred while attempting to delete a record!\n")
-        conn.rollback()
-   
+
 def readContacts():
     conn = sqlite3.connect("contacts.db")  #connect to the DB file table
     try:
@@ -69,6 +75,3 @@ def readContacts():
         return sqlOutput  #return fetched records
     except sqlite3.OperationalError:
         print("\nError: Something is wrong with the DB file.")
-
-#insertDoctor("John","Kelley")
-testTable()
