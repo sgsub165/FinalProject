@@ -1,7 +1,9 @@
 import sqlite3
 
 #function to create table
-def testTable(table):
+def testTable(*args):
+    table = args[0]
+    print(table)
     conn = sqlite3.connect("GnGMedicalGroup.DB")  #connect to the DB file
     c = conn.cursor()   #use for mult row fetch
     #sqllite3 statement to create table
@@ -16,21 +18,27 @@ def testTable(table):
     c.close()
 
 #function to insert contact record data into the DB file
-def insertRecord(table,fname,lname):
+def insertRecord(*args):
+    table = args[0]
+    arg1 = args[1]
+    arg2 = args[2]
     try:
         conn = sqlite3.connect("GnGMedicalGroup.db")  #connect to the DB file
         c = conn.cursor()
         #sqllite3 statement to insert contact record data into the DB file table
-        sqlStatement=("INSERT INTO " + table + "(fname,lname)"
-             "values(?,?)")
-        data = (fname,lname)
+        sqlStatement=("INSERT INTO " + table + "(arg1,arg2)"
+         "values(?,?)")
+        data = (arg1,arg2)
         c.execute(sqlStatement,data)  #execute the sql statement above
         conn.commit()
         conn.close()
     except sqlite3.OperationalError:
         print("\nError: Something is wrong with the DB file.")    
 
-def deleteRecord(table,table_id,pid):
+def deleteRecord(*args):
+    table = args[0]
+    table_id = args[1]
+    pid = args[2]
     try:
         conn = sqlite3.connect("GnGMedicalGroup.db")
         c = conn.cursor()
@@ -42,10 +50,24 @@ def deleteRecord(table,table_id,pid):
         conn.close()
     except sqlite3.OperationalError:
         print("\nError: Something is wrong with the DB file.")
+
+def updateContacts(name,phone,pid):
+    try:
+        conn = sqlite3.connect("contacts.db")  #connect to the DB file
+        c = conn.cursor()
+        #sqllite3 statement to update contact record data in the DB file table
+        sqlStatement = ("UPDATE StephenG SET name=?, phone=? WHERE pid=?;")
+        c.execute(sqlStatement,(name,phone,pid))  #execute the sql statement above
+        conn.commit()
+        c.close
+        conn.close
+    except sqlite3.OperationalError:
+        print("\nError: Something is wrong with the DB file.")
+
    
 #insertRecord("Doctor","Bill","Withers")
 testTable("Doctor")
-deleteRecord("Doctor","doctor_id",17)
+deleteRecord("Doctor","doctor_id",18)
 testTable("Doctor")
 
 def updateContacts(name,phone,pid):
