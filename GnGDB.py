@@ -24,7 +24,7 @@ def readRecordsDA(*args):
     print(sqlOutput)
     return sqlOutput  #return fetched records
 
-readRecordsDA(4)
+#readRecordsDA(4)
 
 ################################################################################################
 
@@ -69,6 +69,43 @@ def deleteRecord(*args):
 #deleteRecord("Patient","patient_id",13)
 
 ###############################################################################################
+
+def readRecordSpecific(*args):
+    conn = sqlite3.connect("GnGMedicalGroupIP.db")  #connect to the DB file table
+    try:
+        cursor = conn.cursor()
+        #sqllite3 statement to query all records from the DB file table
+        sqlStatement = ("SELECT " + args[1] + "," + args[2] + " FROM " + args[0] + ";")
+        cursor.execute(sqlStatement)  #execute the sql statement above
+        sqlOutput = cursor.fetchall()  #fetch all records and prep it for returning to the calling function
+        cursor.close()
+        conn.close
+        print(sqlOutput)
+        return sqlOutput  #return fetched records
+    except sqlite3.OperationalError:
+        print("\nError: Something is wrong with the DB file.")
+
+#readRecordSpecific("User","fname","lname")
+
+##############################################################################################
+
+def readRecord(*args):
+    conn = sqlite3.connect("GnGMedicalGroupIP.db")  #connect to the DB file table
+
+    cursor = conn.cursor()
+    #sqllite3 statement to query all records from the DB file table
+    sqlStatement = ("SELECT * FROM " + args[0] + " WHERE " + args[1] + " = '" + args[2] + "';")
+    cursor.execute(sqlStatement)  #execute the sql statement above
+    sqlOutput = cursor.fetchall()  #fetch all records and prep it for returning to the calling function
+    cursor.close()
+    conn.close
+    print(sqlOutput)
+    return sqlOutput  #return fetched records
+
+#readRecord("User","lname","Bishop")
+
+###############################################################################################
+
 
 #testTable("Doctor")
 
