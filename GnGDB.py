@@ -125,20 +125,20 @@ def updateContacts(name,phone,pid):
         print("\nError: Something is wrong with the DB file.")
 
 
-def readContacts():
-    conn = sqlite3.connect("contacts.db")  #connect to the DB file table
-    try:
-        cursor = conn.cursor()
-        #sqllite3 statement to query all records from the DB file table
-        sqlStatement = ("SELECT * FROM StephenG")
-        cursor.execute(sqlStatement)  #execute the sql statement above
-        sqlOutput = cursor.fetchall()  #fetch all records and prep it for returning to the calling function
-        cursor.close()
-        conn.close
-        return sqlOutput  #return fetched records
-    except sqlite3.OperationalError:
-        print("\nError: Something is wrong with the DB file.")
+def readRecord(*args):
+    conn = sqlite3.connect("GnGMedicalGroupIP.db")  #connect to the DB file table
 
+    cursor = conn.cursor()
+    #sqllite3 statement to query all records from the DB file table
+    sqlStatement = ("SELECT * FROM '" + args[0] + "';")
+    cursor.execute(sqlStatement)  #execute the sql statement above
+    sqlOutput = cursor.fetchall()  #fetch all records and prep it for returning to the calling function
+    cursor.close()
+    conn.close
+    return sqlOutput  #return fetched records
+
+
+#readRecord("Doctor")
 
 #function to create table
 def testTable(*args):
@@ -156,3 +156,24 @@ def testTable(*args):
     data = c.fetchone()
     print(data)
     c.close()
+
+
+##############################################################################################
+
+def readRecord(*args):
+    conn = sqlite3.connect("GnGMedicalGroupIP.db")  #connect to the DB file table
+
+    cursor = conn.cursor()
+    #sqllite3 statement to query all records from the DB file table
+    sqlStatement = ("SELECT * FROM " + args[0] + " WHERE " + args[1] + " = '" + args[2] + "';")
+    cursor.execute(sqlStatement)  #execute the sql statement above
+    sqlOutput = cursor.fetchall()  #fetch all records and prep it for returning to the calling function
+    cursor.close()
+    conn.close
+    print(sqlOutput)
+    return sqlOutput  #return fetched records
+
+readRecord("User","lname","Bishop")
+
+###############################################################################################
+
