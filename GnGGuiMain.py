@@ -663,7 +663,7 @@ class MakeAppointment(Frame):
             date_id = self.dateidVar.get()
             start_time_id = self.timeidVar.get()
             # perform update
-            createAppointmentRecord(patient_id, doctor_id, medical_condition_id, date_id, start_time_id)
+            createAppointmentRecord(patient_id,doctor_id,date_id,start_time_id,medical_condition_id)
             print('\nCreating Appointment...\n')
         else:
             messagebox.showerror('ERROR!', 'Data Entry fields cannot be blank! Please Try again')

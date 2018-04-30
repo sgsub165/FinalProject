@@ -146,7 +146,7 @@ def readRecord(*args):
 
 #######################################################################
 #function to create appoint record and update the doc availability to block
-def createAppointmentRecord(patient_id,doctor_id,medical_condition_id,date_id,start_time_id):
+def createAppointmentRecord(patient_id,doctor_id,date_id,start_time_id,medical_condition_id):
     try:
         conn = sqlite3.connect("GnGDB.db")  #connect to the DB file
         c = conn.cursor()
@@ -154,7 +154,7 @@ def createAppointmentRecord(patient_id,doctor_id,medical_condition_id,date_id,st
                             doctor_id, date_id, start_time_id, medical_condition_id,
                             appointment_status_id, appt_creation_date, appt_cancel_date, appt_cmplt_date)
                             VALUES (NULL,?,?,?,?,?,1,NULL,NULL,NULL);''')
-        c.execute(sqlStatement1,(patient_id,doctor_id,medical_condition_id,date_id,start_time_id))  #execute the sql statement above
+        c.execute(sqlStatement1,(patient_id,doctor_id,date_id,start_time_id,medical_condition_id))  #execute the sql statement above
         sqlStatement2 = ("UPDATE DoctorAvailability SET is_available_id = 2 WHERE doctor_id = ? AND date_id = ? AND start_time_id = ?;")
         c.execute(sqlStatement2,(doctor_id,date_id,start_time_id))
         print(sqlStatement2)
